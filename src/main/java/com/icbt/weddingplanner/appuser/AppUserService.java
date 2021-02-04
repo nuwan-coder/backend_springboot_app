@@ -1,6 +1,7 @@
 package com.icbt.weddingplanner.appuser;
 
 import com.icbt.weddingplanner.loginController.LoginRequest;
+import com.icbt.weddingplanner.loginController.LoginResponse;
 import com.icbt.weddingplanner.registrationController.RegistrationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ public class AppUserService {
 
     private final AppUserRepository appUserRepository;
     private final static String EMAIL_ALREADY_TAKEN_MSG = "Your %s email already taken";
-
 
     public void register(RegistrationRequest registrationRequest){
 
@@ -37,19 +37,33 @@ public class AppUserService {
 
     }
 
-    public Optional<AppUser> login(LoginRequest loginRequest){
+    public LoginResponse login(LoginRequest loginRequest){
         boolean userExist = appUserRepository.findByEmail(loginRequest.getEmail()).isPresent();
         Optional<AppUser> appUser = appUserRepository.findByEmail(loginRequest.getEmail());
+
+        LoginResponse loginResponse;
 
         if(userExist){
             boolean equals = appUser.get().getPassword().equals(loginRequest.getPassword());
             if(equals){
-                return appUser;
+                return  new LoginResponse(
+                        true,
+                        "Login Successful",
+                        appUser
+                );
             }else{
-                throw new IllegalStateException("Invalid password!");
+                return new LoginResponse(
+                        false,
+                        "Invalid Password",
+                        null
+                );
             }
         }else{
-            throw new IllegalStateException("Invalid Email");
+            return new LoginResponse(
+                    false,
+                    "Invalid email",
+                    null
+            );
         }
     }
 

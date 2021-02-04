@@ -18,7 +18,7 @@ public class LoginController {
     private final AppUserService appUserService;
 
     @PostMapping
-    public Optional<AppUser> login(@RequestBody LoginRequest loginRequest){
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
         return appUserService.login(loginRequest);
     }
 

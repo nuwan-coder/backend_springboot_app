@@ -6,6 +6,7 @@ import com.icbt.weddingplanner.registrationController.RegistrationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,6 +66,11 @@ public class AppUserService {
                     null
             );
         }
+    }
+
+    public List<AppUser> getAppUser(){
+        List<AppUser> all = appUserRepository.findAll();
+        return all;
     }
 
 }
